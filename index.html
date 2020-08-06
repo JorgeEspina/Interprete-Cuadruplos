@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Interprete de cuadruplos</title>
+    <link rel="stylesheet" href="resources/css/codemirror.css">
+    <link rel="stylesheet" href="resources/css/isotope.css">
+    <link rel="stylesheet" href="resources/css/bootstrap.css">
+    <link rel="stylesheet" href="resources/css/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Slabo+27px&display=swap" rel="stylesheet">
+</head>
+
+<body id="cuerpo" class="cuerpo">
+    <div id="pestañasEditor">
+        <center>
+            <label style="color: rgb(255, 255, 255); font-size: 30px;">Interprete de cuadruplos</label>
+        </center>
+    </div>
+    <div class="row_layout" style="margin-top: 30px;">
+        <div id="cuadruplos" class="tabEditor">
+            <div class="row_layout" style="width: 1000px;">
+                <button onclick="ejecutar4D()" class="btn btn-success">Ejecutar</button>
+                <button onclick="Optimizar()" class="btn btn-primary">Optimización</button>
+                <button id="btnActivarDebugger" onclick="activarDebugger()" class="btn btn-primary">Debugger</button>
+                <button class="btn btn-danger" onclick="removeBreakpoints()">Quitar breakpoints</button>
+                <button class="btn btn-dark" onclick="btnGenAssembler()">Generar Assembler</button>
+                <button class="btnDebugger btn btn-warning" onclick="continuarDebugger()" style="display: none;">Continuar</button>
+                <button class="btnDebugger btn btn-info" onclick="continuarInstruccion()" style="display: none;">Paso a paso</button>
+                <button class="btnDebugger btn btn-danger" style="display: none;" onclick="detenerDebugger()">Detener</button>
+            </div>
+            <br />
+            <div class="column_layout">
+                <div style="width: 300px;">
+                    <div id="AreaTexto">
+                        <textarea id="textarea4d" name="textarea4d"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="column_layout">
+                <div id="panelDebugger" class="row_layout">
+                    <center>
+                        <h1>Debugger</h1>
+                    </center>
+                    <div id="panelStack" class="column_layout">
+                        <center>
+                            <table id="tablaStack" style="width:100%">
+                                <tr>
+                                    <th scope="colgroup">Stack</th>
+                                    <th scope="colgroup"></th>
+                                </tr>
+                                <tr id="filaStack">
+
+                                </tr>
+                                <tr>
+                                    <th>Direccion</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </table>
+                        </center>
+                    </div>
+
+                    <div id="panelHeap" class="column_layout">
+                        <center>
+                            <table id="tablaHeap" style="width:100%">
+                                <tr>
+                                    <th colspan="2" scope="colgroup">Heap</th>
+                                    <th colspan="2" scope="colgroup"></th>
+                                </tr>
+                                <tr>
+                                    <th>Direccion</th>
+                                    <th>Valor</th>
+                                    <th>Ascii</th>
+                                </tr>
+                            </table>
+                        </center>
+                    </div>
+                    <div id="panelSimbolos" class="column_layout">
+                        <center>
+                            <table id="tablaSimbolos" style="width:100%">
+                                <tr>
+                                    <th colspan="2" scope="colgroup">Simbolos</th>
+                                </tr>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </table>
+                        </center>
+                    </div>
+                </div>
+            </div>
+            <div class="column_layout">
+                <div id="Consola">
+                    <textarea id="consolaArea" name="consolaArea" class="consola"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="resources/js/codemirror.js"></script>
+    <script src="resources/js/Jquery.js"></script>
+    <script src="resources/js/bootstrap.js"></script>
+    <script src="resources/mode/javascript/javascript.js"></script>
+    <script src="resources/mode/pascal/pascal.js"></script>
+    <script>
+        var editor4D = CodeMirror.fromTextArea(textarea4d, {
+            lineNumbers: true,
+            mode: "javascript",
+            theme: "isotope"
+        });
+        editor4D.setSize(null, 480);
+        editor4D.getDoc().setValue('=,4,,t1\n=,3,,t2\n*,t1,t2,t3\nprint(%e,t3)');
+    </script>
+
+    <script src="resources/js/main.js"></script>
+    <script>
+        var exports = {};
+    </script>
+    <script src="cuadruplos/Grammar/quadruplesGrammar.js"></script>
+    <script src="cuadruplos/Arbol/AST.js"></script>
+    <script src="cuadruplos/TablaSimbolo/Simbolo.js"></script>
+    <script src="cuadruplos/TablaSimbolo/Tabla.js"></script>
+    <script src="cuadruplos/Arbol/Asignacion.js"></script>
+    <script src="cuadruplos/Arbol/Metodo.js"></script>
+    <script src="cuadruplos/Arbol/IniciarMetodo.js"></script>
+    <script src="cuadruplos/Arbol/FinalizarMetodo.js"></script>
+    <script src="cuadruplos/Arbol/Llamada.js"></script>
+    <script src="cuadruplos/Arbol/Operacion.js"></script>
+    <script src="cuadruplos/Arbol/AsignacionEstructura.js"></script>
+    <script src="cuadruplos/Arbol/AccesoEstructura.js"></script>
+    <script src="cuadruplos/Arbol/Print.js"></script>
+    <script src="cuadruplos/Arbol/Identificador.js"></script>
+    <script src="cuadruplos/Arbol/Primitivo.js"></script>
+    <script src="cuadruplos/Arbol/Etiqueta.js"></script>
+    <script src="cuadruplos/Arbol/SaltoCondicional.js"></script>
+    <script src="cuadruplos/Arbol/SaltoIncondicional.js"></script>
+    <script src="cuadruplos/Arbol/Invalue.js"></script>
+    <script src="cuadruplos/Ejecucion4D.js"></script>
+    <script src="cuadruplos/Debugger4D.js"></script>
+    <script src="resources/js/Traducir.js"></script>
+    <script src="cuadruplos/GeneracionASM.js"></script>
+    <script src="cuadruplos/Optimizacion.js"></script>
+</body>
+
+</html>
